@@ -1,7 +1,7 @@
 {
   "name": "freelance_backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "apiserver.js",
   "scripts": {
     "start": "node apiserver.js",
   "dev": "nodemon apiserver.js"
