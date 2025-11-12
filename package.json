@@ -4,7 +4,7 @@
   "main": "apiserver.js",
   "scripts": {
     "start": "node apiserver.js",
-  "dev": "nodemon apiserver.js"
+    "dev": "nodemon apiserver.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,4 @@
     "razorpay": "^2.9.6"
   },
   "description": ""
-  
 }
-
