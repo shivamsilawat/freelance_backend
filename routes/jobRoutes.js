@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Job = require("../models/Job");  // ✅ Correct model
+const Job = require("..freelance_backend/models/Job");  // ✅ Correct model
 const auth = require("../middleware/auth"); // ✅ JWT middleware
 
 // 🧩 1️⃣ Get all jobs (public)
