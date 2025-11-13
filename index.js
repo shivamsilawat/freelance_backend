@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-
+const MONGO_URL = "your_connection_string_here"
 // Models
 const Job = require("./models/Job");
 const Application = require("./models/applicationModel");
@@ -35,6 +35,16 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // -----------------------
 // Routes
+app.get("/debug", (req, res) => {
+  res.json({ message: "✅ Server is running fine" });
+});
+
+const userRoutes = require("./routes/userRoutes"); 
+app.use("/api", userRoutes); 
+
+
+
+
 // -----------------------
 
 // Ping test
@@ -51,6 +61,7 @@ app.get("/", (req, res) => {
 
 // Signup
 app.post("/signup", async (req, res) => {
+  console.log("Signup body:", req.body);
   const { username, email, password, role } = req.body;
 
   if (!username || !email || !password)
@@ -64,12 +75,22 @@ app.post("/signup", async (req, res) => {
     const newUser = new User({ username, email, password: hashedPassword, role });
     await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    // Updated JSON response with user info
+    res.status(201).json({
+      message: "User registered successfully",
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role
+      }
+    });
   } catch (err) {
     console.error("Signup error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // Login
 app.post("/login", async (req, res) => {
@@ -101,6 +122,9 @@ app.post("/login", async (req, res) => {
 
 // -----------------------
 // Job Routes
+const jobRoutes = require("./routes/jobRoutes");
+app.use("/api/jobs", jobRoutes);
+
 // -----------------------
 
 // Get all jobs
@@ -131,6 +155,28 @@ app.post("/api/jobs/create", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+// post job 
+app.post("/jobs", async (req, res) => {
+  const { title, description, budget, postedBy } = req.body;
+
+  if (!title || !description || !budget || !postedBy)
+    return res.status(400).json({ message: "All fields are required" });
+
+  try {
+    const newJob = new Job({ title, description, budget, postedBy });
+    await newJob.save();
+
+    res.status(201).json({
+      message: "Job posted successfully",
+      job: newJob
+    });
+  } catch (err) {
+    console.error("Post job error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // -----------------------
 // Application Routes
