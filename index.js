@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const MONGO_URL = "your_connection_string_here"
 // Models
-const Job = require("./models/job");
+const job = require("./models/job");
 const Application = require("./models/applicationModel");
 const User = require("./models/User"); // ✅ Make sure User model is only defined once
 
